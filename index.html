@@ -4,108 +4,72 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Invoice Tracker</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-:root{--bg:#f6f3ee;--card:#fff;--ink:#1f1d1a;--mute:#6f695f;--line:#e7e1d6;--field:#faf8f4;--accent:#d9481c;--accent2:#b93a14;--ok:#2a7a4b;--warn:#a96d10;--bad:#c0322b;--okbg:#e4f2ea;--warnbg:#fbefd6;--badbg:#fbe3e0;--shadow:0 1px 2px rgba(40,30,10,.05),0 6px 20px rgba(40,30,10,.05);
+:root{--bg:#f7f4ef;--card:#fff;--ink:#22201c;--mute:#7a746a;--line:#e6e0d5;--accent:#d9481c;--ok:#2f7d4f;--warn:#b7791f;--bad:#c0322b;--okbg:#e5f3ea;--warnbg:#fbf0d9;--badbg:#fbe4e2;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141311;--card:#1e1c19;--ink:#f1ece3;--mute:#a09889;--line:#35322c;--field:#171614;--accent:#ff7043;--accent2:#ff8a63;--ok:#6cc48f;--warn:#e8b24f;--bad:#ff8a80;--okbg:#1c3226;--warnbg:#382d17;--badbg:#3c2220;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25)}}
-:root[data-theme="dark"]{--bg:#141311;--card:#1e1c19;--ink:#f1ece3;--mute:#a09889;--line:#35322c;--field:#171614;--accent:#ff7043;--accent2:#ff8a63;--ok:#6cc48f;--warn:#e8b24f;--bad:#ff8a80;--okbg:#1c3226;--warnbg:#382d17;--badbg:#3c2220;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161513;--card:#211f1c;--ink:#f0ebe2;--mute:#9d968a;--line:#35322c;--accent:#ff7043;--ok:#6cc48f;--warn:#e8b24f;--bad:#ff8a80;--okbg:#1f3327;--warnbg:#3a2f18;--badbg:#3d2321}}
+:root[data-theme="dark"]{--bg:#161513;--card:#211f1c;--ink:#f0ebe2;--mute:#9d968a;--line:#35322c;--accent:#ff7043;--ok:#6cc48f;--warn:#e8b24f;--bad:#ff8a80;--okbg:#1f3327;--warnbg:#3a2f18;--badbg:#3d2321}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
-main{max-width:900px;margin:0 auto;padding:32px 18px 80px}
-.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:24px}
-h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:36px;line-height:1.1;margin:0 0 6px;letter-spacing:-.8px}
-.sub{color:var(--mute);margin:0}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow)}
-.stat small{color:var(--mute);display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.stat b{font-family:Fraunces,Georgia,serif;font-size:30px;font-weight:600;letter-spacing:-.5px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Helvetica Neue",Arial,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:30px;margin:0 0 4px;letter-spacing:-.5px}
+.sub{color:var(--mute);margin:0 0 20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat small{color:var(--mute);display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.stat b{font-family:Georgia,serif;font-size:26px}
 .stat.bad b{color:var(--bad)}
-.stat .hint{display:block;color:var(--mute);font-size:13px;margin-top:2px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
-form{padding:20px;display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:28px;align-items:end}
-form h2{grid-column:1/-1;margin:0;font-size:17px}
-.c2{grid-column:span 2}.c3{grid-column:span 3}.c6{grid-column:1/-1}
-label{font-size:13px;font-weight:600;color:var(--mute);display:flex;flex-direction:column;gap:6px}
-input,select{font:inherit;font-weight:500;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:12px;padding:0 14px;height:48px;width:100%;transition:border-color .15s,box-shadow .15s}
-input::placeholder{color:var(--mute);opacity:.6;font-weight:400}
-input:hover,select:hover{border-color:var(--mute)}
-input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
-button{font:inherit;font-weight:600;cursor:pointer;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);height:44px;padding:0 18px;transition:background .15s,transform .05s,border-color .15s}
-button:hover{border-color:var(--mute)}button:active{transform:scale(.98)}
-button:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
-button.primary{background:var(--accent);border-color:var(--accent);color:#fff;height:52px;font-size:16px}
-button.primary:hover{background:var(--accent2);border-color:var(--accent2)}
-.tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
-.seg{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:5px;flex-wrap:wrap}
-.seg button{border:0;background:transparent;height:38px;padding:0 14px;color:var(--mute)}
-.seg button.on{background:var(--ink);color:var(--bg)}
-.seg em{font-style:normal;font-size:12px;opacity:.7;margin-left:6px}
-.search{flex:1;min-width:180px}
-.search input{height:46px;background:var(--card)}
-.group{margin-bottom:16px;overflow:hidden}
-.group>header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
-.group h3{margin:0;font-size:18px}
-.owed{font-weight:600;font-size:14px;color:var(--mute)}.owed.has{color:var(--ink)}
-.row{display:grid;grid-template-columns:1fr auto;gap:8px 16px;padding:16px 20px;border-bottom:1px solid var(--line);align-items:center}
+form{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px;align-items:end}
+label{font-size:12px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px;width:100%}
+input:focus{outline:2px solid var(--accent);outline-offset:1px}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;padding:10px}
+button:hover{filter:brightness(.96)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.bar button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.group{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.group>header{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px;border-bottom:1px solid var(--line);gap:8px}
+.group h2{margin:0;font-size:17px}
+.group header span{color:var(--mute);font-size:14px}
+.row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center}
 .row:last-child{border-bottom:0}
-.amt{font-weight:700;font-size:18px;text-align:right;font-variant-numeric:tabular-nums}
-.row.paid .amt,.row.paid .num{opacity:.55}
-.num{font-weight:600}
-.meta{color:var(--mute);font-size:14px;margin-top:2px}
-.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;margin-left:8px;vertical-align:1px}
+.row .amt{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.meta{color:var(--mute);font-size:13px}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;margin-left:6px}
 .b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}.b-bad{background:var(--badbg);color:var(--bad)}
-.acts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
-.acts button{height:40px;padding:0 14px;font-size:14px}
-.acts .pay{background:var(--okbg);color:var(--ok);border-color:transparent}
-.acts .del{margin-left:auto;color:var(--bad)}
-.empty{text-align:center;color:var(--mute);padding:48px 16px;border:1.5px dashed var(--line);border-radius:16px}
-.foot{color:var(--mute);font-size:13px;margin-top:28px;text-align:center}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;display:flex;gap:14px;align-items:center;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:10;max-width:calc(100% - 32px)}
-.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.toast button{background:transparent;border:0;color:var(--accent);height:auto;padding:4px 6px}
-@media (max-width:640px){h1{font-size:30px}form{grid-template-columns:1fr 1fr;padding:16px}.c2,.c3{grid-column:span 1}.c6,form h2{grid-column:1/-1}.c3.wide{grid-column:1/-1}}
+.acts{grid-column:1/-1;display:flex;gap:8px}
+.acts button{padding:5px 10px;font-size:13px}
+.empty{text-align:center;color:var(--mute);padding:40px 10px;border:1px dashed var(--line);border-radius:12px}
+.foot{color:var(--mute);font-size:12px;margin-top:20px;text-align:center}
 </style>
 </head>
 <body>
 <main>
-  <div class="top">
-    <div>
-      <h1>Invoice Tracker</h1>
-      <p class="sub">Who owes you what, and how late it is.</p>
-    </div>
-    <button id="export" hidden>Export CSV</button>
-  </div>
+  <h1>Invoice Tracker</h1>
+  <p class="sub">Who owes you what, and how late it is.</p>
 
   <section class="stats" id="stats"></section>
 
-  <form id="f" class="card">
-    <h2>New invoice</h2>
-    <label class="c3 wide">Client<input id="client" list="clients" required placeholder="Studio Nord" autocomplete="off"></label>
-    <label class="c3 wide">Invoice #<input id="num" placeholder="2026-014" autocomplete="off"></label>
-    <label class="c2">Amount (€)<input id="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required placeholder="0.00"></label>
-    <label class="c2">Issued<input id="issued" type="date" required></label>
-    <label class="c2">Payment terms
-      <select id="terms"><option value="14">Net 14 days</option><option value="30" selected>Net 30 days</option><option value="60">Net 60 days</option><option value="0">Due on receipt</option><option value="x">Custom date</option></select>
-    </label>
-    <label class="c3 wide" id="dueWrap" hidden>Due<input id="due" type="date" required></label>
-    <button class="primary c6" type="submit">Add invoice</button>
+  <form id="f">
+    <label>Client<input id="client" list="clients" required placeholder="Studio Nord"></label>
+    <label>Invoice #<input id="num" placeholder="2026-014"></label>
+    <label>Amount (€)<input id="amount" type="number" min="0" step="0.01" required></label>
+    <label>Issued<input id="issued" type="date" required></label>
+    <label>Due<input id="due" type="date" required></label>
+    <button class="primary" type="submit">Add invoice</button>
     <datalist id="clients"></datalist>
   </form>
 
-  <div class="tools">
-    <div class="seg" id="bar"></div>
-    <label class="search"><input id="q" type="search" placeholder="Search client or invoice #" aria-label="Search"></label>
-  </div>
+  <div class="bar" id="bar"></div>
   <div id="list"></div>
   <p class="foot" id="foot"></p>
 </main>
-<div class="toast" id="toast" role="status"><span id="tmsg"></span><button id="tact">Undo</button></div>
 
 <script>
 (function(){
-  var items=[], filter='open', query='', store=null, saveTimer=null, undo=null, toastTimer=null, downloads=null, LS='invoice-tracker-v1';
+  var items=[], filter='open', store=null, saveTimer=null, LS='invoice-tracker-v1';
   var $=function(id){return document.getElementById(id)};
   var eur=new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'});
   var today=function(){var d=new Date();d.setHours(0,0,0,0);return d};
@@ -113,18 +77,12 @@ button.primary:hover{background:var(--accent2);border-color:var(--accent2)}
   var parse=function(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])};
   var fmtDate=function(s){return parse(s).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})};
   var daysLate=function(i){return Math.round((today()-parse(i.due))/864e5)};
-  var esc=function(s){var d=document.createElement('div');d.textContent=s==null?'':s;return d.innerHTML.replace(/"/g,'&quot;')};
+  var esc=function(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML};
   var sum=function(a){return a.reduce(function(t,i){return t+i.amount},0)};
-  var plural=function(n,w){return n+' '+w+(n===1?'':'s')};
 
-  function applyTerms(){
-    var t=$('terms').value;
-    $('dueWrap').hidden=t!=='x';
-    if(t!=='x'&&$('issued').value){var d=parse($('issued').value);d.setDate(d.getDate()+(+t));$('due').value=iso(d)}
-  }
-  $('issued').value=iso(today());applyTerms();
-  $('issued').addEventListener('change',applyTerms);
-  $('terms').addEventListener('change',applyTerms);
+  $('issued').value=iso(today());
+  var d30=today();d30.setDate(d30.getDate()+30);$('due').value=iso(d30);
+  $('issued').addEventListener('change',function(){if(!this.value)return;var d=parse(this.value);d.setDate(d.getDate()+30);$('due').value=iso(d)});
 
   function persist(){
     clearTimeout(saveTimer);
@@ -139,7 +97,6 @@ button.primary:hover{background:var(--accent2);border-color:var(--accent2)}
     try{
       if(window.claude&&claude.use){
         var db=await claude.use('db'), user=await claude.use('user');
-        try{downloads=await claude.use('downloads');if(downloads)$('export').hidden=false}catch(e){}
         if(db&&user){
           var uid=await user.id();
           if(uid){
@@ -159,92 +116,56 @@ button.primary:hover{background:var(--accent2);border-color:var(--accent2)}
   function badge(i){
     if(i.paidOn)return '<span class="badge b-ok">Paid '+fmtDate(i.paidOn)+'</span>';
     var l=daysLate(i);
-    if(l>0)return '<span class="badge b-bad">'+plural(l,'day')+' overdue</span>';
+    if(l>0)return '<span class="badge b-bad">'+l+' day'+(l>1?'s':'')+' overdue</span>';
     if(l===0)return '<span class="badge b-warn">Due today</span>';
-    return '<span class="badge b-warn">Due in '+plural(-l,'day')+'</span>';
-  }
-  function matches(i){
-    var q=query.toLowerCase();
-    return !q||i.client.toLowerCase().indexOf(q)>-1||(i.num||'').toLowerCase().indexOf(q)>-1;
-  }
-  function inTab(i,f){
-    return f==='all'||(f==='open'&&!i.paidOn)||(f==='paid'&&i.paidOn)||(f==='overdue'&&!i.paidOn&&daysLate(i)>0);
+    return '<span class="badge b-warn">Due in '+(-l)+' day'+(l<-1?'s':'')+'</span>';
   }
   function render(){
     var open=items.filter(function(i){return !i.paidOn});
     var over=open.filter(function(i){return daysLate(i)>0});
-    var overClients=new Set(over.map(function(i){return i.client})).size;
     $('stats').innerHTML=
-      '<div class="stat"><small>Outstanding</small><b>'+eur.format(sum(open))+'</b><span class="hint">'+plural(open.length,'unpaid invoice')+'</span></div>'+
-      '<div class="stat bad"><small>Overdue</small><b>'+eur.format(sum(over))+'</b><span class="hint">'+(over.length?plural(over.length,'invoice')+' from '+plural(overClients,'client'):'Nothing late')+'</span></div>'+
-      '<div class="stat"><small>Paid so far</small><b>'+eur.format(sum(items.filter(function(i){return i.paidOn})))+'</b><span class="hint">'+plural(items.length-open.length,'invoice')+' settled</span></div>';
+      '<div class="stat"><small>Outstanding</small><b>'+eur.format(sum(open))+'</b></div>'+
+      '<div class="stat bad"><small>Overdue</small><b>'+eur.format(sum(over))+'</b></div>'+
+      '<div class="stat"><small>Unpaid invoices</small><b>'+open.length+'</b></div>';
     var names=Array.from(new Set(items.map(function(i){return i.client}))).sort();
     $('clients').innerHTML=names.map(function(n){return '<option value="'+esc(n)+'">'}).join('');
 
     var tabs=[['open','Unpaid'],['overdue','Overdue'],['paid','Paid'],['all','All']];
-    $('bar').innerHTML=tabs.map(function(t){
-      var n=items.filter(function(i){return inTab(i,t[0])}).length;
-      return '<button data-f="'+t[0]+'" class="'+(filter===t[0]?'on':'')+'">'+t[1]+'<em>'+n+'</em></button>'}).join('');
+    $('bar').innerHTML=tabs.map(function(t){return '<button data-f="'+t[0]+'" class="'+(filter===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('');
 
-    var shown=items.filter(function(i){return inTab(i,filter)&&matches(i)});
-    if(!shown.length){
-      $('list').innerHTML='<div class="empty">'+(!items.length?'No invoices yet. Add your first one above.':query?'No matches for “'+esc(query)+'”.':'Nothing here – nice.')+'</div>';return}
+    var shown=items.filter(function(i){
+      return filter==='all'||(filter==='open'&&!i.paidOn)||(filter==='paid'&&i.paidOn)||(filter==='overdue'&&!i.paidOn&&daysLate(i)>0)});
+    if(!shown.length){$('list').innerHTML='<div class="empty">'+(items.length?'Nothing here – nice.':'No invoices yet. Add your first one above.')+'</div>';return}
 
     var by={};shown.forEach(function(i){(by[i.client]=by[i.client]||[]).push(i)});
     var owedOf=function(c){return sum(by[c].filter(function(i){return !i.paidOn}))};
-    var clients=Object.keys(by).sort(function(a,b){return owedOf(b)-owedOf(a)||a.localeCompare(b)});
+    var clients=Object.keys(by).sort(function(a,b){return owedOf(b)-owedOf(a)});
     $('list').innerHTML=clients.map(function(c){
       var rows=by[c].sort(function(a,b){return a.due<b.due?-1:1});
       var owed=owedOf(c);
-      return '<section class="group card"><header><h3>'+esc(c)+'</h3><span class="owed'+(owed?' has':'')+'">'+(owed?eur.format(owed)+' owed':'All paid')+'</span></header>'+
+      return '<section class="group"><header><h2>'+esc(c)+'</h2><span>'+(owed?eur.format(owed)+' owed':'all paid')+'</span></header>'+
         rows.map(function(i){
-          var late=!i.paidOn&&daysLate(i)>0;
-          return '<div class="row'+(i.paidOn?' paid':'')+'"><div><span class="num">'+(esc(i.num)||'No number')+'</span>'+badge(i)+
+          return '<div class="row"><div><b>'+(esc(i.num)||'No number')+'</b>'+badge(i)+
             '<div class="meta">Issued '+fmtDate(i.issued)+' · due '+fmtDate(i.due)+'</div></div>'+
             '<div class="amt">'+eur.format(i.amount)+'</div>'+
-            '<div class="acts"><button class="'+(i.paidOn?'':'pay')+'" data-paid="'+i.id+'">'+(i.paidOn?'Mark unpaid':'✓ Mark paid')+'</button>'+
-            (late?'<button data-remind="'+i.id+'">Copy reminder</button>':'')+
-            '<button class="del" data-del="'+i.id+'">Delete</button></div></div>'}).join('')+'</section>';
+            '<div class="acts"><button data-paid="'+i.id+'">'+(i.paidOn?'Mark unpaid':'Mark paid')+'</button>'+
+            '<button data-del="'+i.id+'">Delete</button></div></div>'}).join('')+'</section>';
     }).join('');
   }
 
-  function toast(msg,action){
-    $('tmsg').textContent=msg;$('tact').hidden=!action;undo=action||null;
-    $('toast').classList.add('show');clearTimeout(toastTimer);
-    toastTimer=setTimeout(function(){$('toast').classList.remove('show');undo=null},action?6000:2500);
-  }
-  $('tact').addEventListener('click',function(){if(undo)undo();$('toast').classList.remove('show');undo=null});
-
-  $('q').addEventListener('input',function(){query=this.value.trim();render()});
   $('f').addEventListener('submit',function(e){
     e.preventDefault();
-    var amt=parseFloat($('amount').value);
-    if(!(amt>0)||$('due').value<$('issued').value){toast('Check the amount and dates.');return}
     items.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-      client:$('client').value.trim(),num:$('num').value.trim(),amount:amt,
+      client:$('client').value.trim(),num:$('num').value.trim(),amount:parseFloat($('amount').value)||0,
       issued:$('issued').value,due:$('due').value,paidOn:null});
     $('client').value='';$('num').value='';$('amount').value='';
-    persist();render();$('client').focus();toast('Invoice added.');
+    persist();render();$('client').focus();
   });
   document.addEventListener('click',function(e){
-    var t=e.target.closest('button');if(!t)return;
+    var t=e.target;
     if(t.dataset.f){filter=t.dataset.f;render()}
     if(t.dataset.paid){items.forEach(function(i){if(i.id===t.dataset.paid)i.paidOn=i.paidOn?null:iso(today())});persist();render()}
-    if(t.dataset.del){
-      var idx=items.findIndex(function(i){return i.id===t.dataset.del});
-      if(idx>-1){var gone=items.splice(idx,1)[0];persist();render();
-        toast('Invoice deleted.',function(){items.splice(Math.min(idx,items.length),0,gone);persist();render()})}
-    }
-    if(t.dataset.remind){
-      var i=items.find(function(x){return x.id===t.dataset.remind});if(!i)return;
-      var txt='Hi '+i.client+',\n\nA friendly reminder that invoice '+(i.num||'')+' for '+eur.format(i.amount)+' was due on '+fmtDate(i.due)+' and is now '+plural(daysLate(i),'day')+' overdue. Could you let me know when I can expect payment?\n\nThank you!';
-      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){toast('Reminder copied.')},function(){toast('Couldn’t copy to clipboard.')});
-    }
-    if(t.id==='export'&&downloads){
-      var csv='Client,Invoice,Amount,Issued,Due,Paid on\n'+items.map(function(i){
-        return [i.client,i.num,i.amount.toFixed(2),i.issued,i.due,i.paidOn||''].map(function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
-      downloads.save({filename:'invoices-'+iso(today())+'.csv',data:csv}).then(function(){toast('Exported.')},function(){});
-    }
+    if(t.dataset.del&&confirm('Delete this invoice?')){items=items.filter(function(i){return i.id!==t.dataset.del});persist();render()}
   });
 
   render();
